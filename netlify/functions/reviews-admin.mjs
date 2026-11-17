@@ -9,7 +9,7 @@ export default async(request)=>{
  const store=getStore('smokeluxe-approved-reviews');
  try {
   if(request.method==='GET'){
-   const forms=await api('/sites/'+encodeURIComponent(process.env.SITE_ID)+'/forms',process.env.NETLIFY_ACCESS_TOKEN);
+   const forms=await api('/sites/'+encodeURIComponent(process.env.SMOKELUXE_SITE_ID)+'/forms',process.env.NETLIFY_ACCESS_TOKEN);
    const form=forms.find(f=>f.name==='customer-reviews');
    if(!form)return reply({error:'Customer reviews form not found'},404);
    const submissions=await api('/forms/'+encodeURIComponent(form.id)+'/submissions?per_page=100',process.env.NETLIFY_ACCESS_TOKEN);
@@ -19,7 +19,7 @@ export default async(request)=>{
   }
   if(request.method==='POST'){
    const body=await request.json();if(!['approve','reject'].includes(body.action)||typeof body.id!=='string')return reply({error:'Invalid request'},400);
-   const forms=await api('/sites/'+encodeURIComponent(process.env.SITE_ID)+'/forms',process.env.NETLIFY_ACCESS_TOKEN);const form=forms.find(f=>f.name==='customer-reviews');if(!form)return reply({error:'Form missing'},404);
+   const forms=await api('/sites/'+encodeURIComponent(process.env.SMOKELUXE_SITE_ID)+'/forms',process.env.NETLIFY_ACCESS_TOKEN);const form=forms.find(f=>f.name==='customer-reviews');if(!form)return reply({error:'Form missing'},404);
    const submissions=await api('/forms/'+encodeURIComponent(form.id)+'/submissions?per_page=100',process.env.NETLIFY_ACCESS_TOKEN);const item=submissions.find(s=>s.id===body.id);if(!item)return reply({error:'Submission not found'},404);
    const ids=await store.get('approved-ids',{type:'json'})||[];if(ids.includes(body.id))return reply({ok:true});
    if(body.action==='approve'){
