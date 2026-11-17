@@ -4,7 +4,7 @@ const reply=(data,status=200)=>new Response(JSON.stringify(data),{status,headers
 const safeEqual=(a,b)=>{const x=Buffer.from(a||''),y=Buffer.from(b||'');return x.length===y.length && timingSafeEqual(x,y)};
 const api=async(path,token)=>{const r=await fetch('https://api.netlify.com/api/v1'+path,{headers:{Authorization:'Bearer '+token}});if(!r.ok)throw Error('Netlify API error '+r.status);return r.json()};
 export default async(request)=>{
- if(!process.env.REVIEW_ADMIN_PASSWORD||!process.env.NETLIFY_ACCESS_TOKEN||!process.env.SITE_ID) return reply({error:'Missing environment configuration'},503);
+ if(!process.env.REVIEW_ADMIN_PASSWORD||!process.env.NETLIFY_ACCESS_TOKEN||!process.env.SMOKELUXE_SITE_ID) return reply({error:'Missing environment configuration'},503);
  if(!safeEqual(request.headers.get('x-admin-password'),process.env.REVIEW_ADMIN_PASSWORD))return reply({error:'Incorrect password'},401);
  const store=getStore('smokeluxe-approved-reviews');
  try {
