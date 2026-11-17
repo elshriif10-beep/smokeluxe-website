@@ -1,0 +1,7 @@
+New photographs load from Pexels image CDN; original bundled photographs are automatic fallback if CDN cannot load.
+Photo sources:
+https://www.pexels.com/photo/36786756/
+https://www.pexels.com/photo/18452312/
+https://www.pexels.com/photo/16333628/
+https://www.pexels.com/photo/4394592/
+Pexels license and restrictions should be checked for commercial tobacco-related contexts.

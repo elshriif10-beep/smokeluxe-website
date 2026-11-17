@@ -1,0 +1,16 @@
+CUSTOMER REVIEWS - HOW TO MODERATE
+
+1. In Netlify, enable Forms/Form detection if prompted, then redeploy this ZIP.
+2. New customer reviews arrive in Netlify > Forms > customer-reviews (may be under Forms or Data).
+3. No reviews are automatically published.
+4. To publish an approved review, edit approved-reviews.json in the site ZIP, e.g.:
+[
+  {"name":"Customer first name","rating":5,"review":"Their genuine review text","approved":true}
+]
+5. Re-upload the updated site ZIP to Netlify. To remove a review, delete its entry and redeploy.
+6. Keep reviews authentic, do not edit their sentiment; get permission to show names.
+
+IMPORTANT: Netlify Forms submissions are NOT an automatic publishing/admin approval panel. Approval requires editing approved-reviews.json and redeploying. The public page shows only approved=true entries. Check Netlify Forms availability and any plan limits.
+
+WhatsApp floating button raised ~90-110px from the bottom to avoid the Netlify badge.
+Google verification file included.

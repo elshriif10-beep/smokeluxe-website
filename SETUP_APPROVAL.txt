@@ -1,0 +1,14 @@
+SMOKELUXE REVIEW APPROVAL - INSTALLATION
+
+This is SOURCE code, not a Netlify Drop-ready deployment. To activate Functions, connect this folder to a GitHub repository and deploy it as a Netlify build on your EXISTING project. Do not create a second site or change DNS.
+
+Netlify environment variables required (keep secret):
+REVIEW_ADMIN_PASSWORD = choose a strong private password
+NETLIFY_ACCESS_TOKEN = a Netlify personal access token with access to this site and its forms
+SITE_ID = your existing Netlify project/site ID (API ID)
+
+Netlify build: publish directory '.'; no build command needed; functions directory netlify/functions.
+After deployment open https://smokeluxe.ae/reviews-admin.html and enter password.
+Approve/reject stores decisions in Netlify Blobs. Public reviews load from a function; no ZIP upload for each approval.
+Existing approved-reviews.json is NOT imported automatically. If a review was previously published in that file, approve it again from the admin page.
+SECURITY: Never publish the token or admin password in source files or browser code.

@@ -1,0 +1,1 @@
+SMOKELUXE final site package\nUpload the CONTENTS of this folder to Netlify, keeping index.html and assets/ at the root.\nPhotos: two user-supplied originals, converted to WebP. Background videos: original video bytes retained.\nAnalytics: no tracking ID was provided; GA4 requires a real Measurement ID before tracking will work.\nTest the form and links after publishing.\n
