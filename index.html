@@ -624,7 +624,13 @@
             .fade-in { transition: none; opacity: 1; transform: none; }
             .smoke-overlay, .scroll-cue .line { animation: none; }
         }
-    </style>
+    
+/* Menu-to-booking shortcut */
+.flavor-item .flavor-choose{margin-left:auto;flex-shrink:0;background:transparent;color:var(--gold-light);border:1px solid var(--gold-dim);padding:6px 10px;font:500 .68rem var(--font-body);letter-spacing:.5px;cursor:pointer;transition:background .2s,color .2s}
+.flavor-item .flavor-choose:hover,.flavor-item .flavor-choose:focus-visible{background:var(--gold);color:var(--black);outline-offset:3px}
+.flavor-item .flavor-choose[aria-pressed="true"]{background:var(--gold);color:var(--black)}
+#booking{scroll-margin-top:90px}
+</style>
 <style>
 /* SMOKELUXE booking UX enhancements */
 .booking-label{display:block;text-align:left;color:#d8c18b;font:500 12px Montserrat,sans-serif;letter-spacing:.04em;margin-bottom:8px}.form-control{box-sizing:border-box;max-width:100%}select.form-control{appearance:auto;color:#eee;background-color:#161616}select.form-control option{background:#161616;color:#eee}.flavor-picker{position:relative}.flavor-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left}.flavor-panel{background:#171717;border:1px solid #a58a52;padding:12px;border-radius:6px;margin-top:6px;max-height:340px;overflow:auto;position:relative;z-index:4}.flavor-options{margin-top:10px}.flavor-group-label{font-weight:700;color:#d4b875;font-size:12px;margin:12px 0 6px}.flavor-option{display:flex;gap:10px;align-items:center;color:#eee;font-size:13px;padding:7px 4px;cursor:pointer}.flavor-option input{accent-color:#c9a45d;width:17px;height:17px}.selected-flavors{font-size:12px;color:#d6c9a8;margin-top:8px;line-height:1.7}.booking-error{color:#ffb7a8;text-align:left;font-size:13px;margin:10px 0}.floating-wa{position:fixed;bottom:max(110px,calc(env(safe-area-inset-bottom) + 95px));right:20px;width:55px;height:55px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;z-index:999;box-shadow:0 5px 20px #0008}.floating-wa svg{width:31px;height:31px}.floating-wa:focus-visible{outline:3px solid #fff;outline-offset:3px}.review-backdrop{position:fixed;inset:0;background:#000b;z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}.review-backdrop[hidden],.flavor-panel[hidden],.booking-error[hidden]{display:none!important}.review-dialog{background:#171717;border:1px solid #b7965d;color:#fff;border-radius:12px;max-width:520px;width:100%;max-height:90vh;overflow:auto;padding:25px;box-sizing:border-box}.review-dialog h2{font:26px Cinzel,serif;color:#d4b875;margin:0 0 20px}.review-details{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.9 Montserrat,sans-serif}.review-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}.review-actions .btn{font-size:12px;cursor:pointer;text-align:center}.review-edit{border:1px solid #b7965d;color:#e7d4a3;background:transparent}.review-note{font-size:11px;color:#aaa;margin:15px 0 0}.form-control:focus-visible,.flavor-toggle:focus-visible{outline:2px solid #e1bd72;outline-offset:2px}@media(max-width:600px){.floating-wa{bottom:max(105px,calc(env(safe-area-inset-bottom) + 90px));right:14px;width:50px;height:50px}.review-dialog{padding:18px}.review-actions .btn{width:100%}}</style><meta content="https://smokeluxe.ae/assets/smokeluxe-beach.webp" property="og:image"/></head>
@@ -1026,6 +1032,28 @@
     label:category.querySelector('.category-title')?.textContent.trim() || 'Flavors',
     items:Array.from(category.querySelectorAll('.flavor-item')).map(item=>item.querySelector('span')?.textContent.trim()).filter(Boolean)
   }));
+  // Add a booking shortcut to each existing flavor; use the same selection state as the booking form.
+  document.querySelectorAll('#menu .flavor-item').forEach(item=>{
+    const flavor=item.querySelector('span')?.textContent.trim();
+    if(!flavor)return;
+    const button=document.createElement('button');
+    button.type='button';button.className='flavor-choose';button.textContent='Choose';
+    button.setAttribute('aria-label','Choose '+flavor+' for booking');
+    button.setAttribute('aria-pressed','false');
+    button.addEventListener('click',()=>{
+      selected.add(flavor);
+      updateSelected();renderFlavors(byId('flavorSearch').value);
+      document.querySelectorAll('#menu .flavor-choose').forEach(btn=>{
+        const name=btn.closest('.flavor-item')?.querySelector('span')?.textContent.trim();
+        const active=selected.has(name);
+        btn.setAttribute('aria-pressed',String(active));
+        btn.textContent=active?'Selected':'Choose';
+      });
+      byId('booking').scrollIntoView({behavior:'smooth',block:'start'});
+      if(typeof window.gtag==='function')window.gtag('event','menu_flavor_selected');
+    });
+    item.appendChild(button);
+  });
   function renderFlavors(query='') {
     flavorOptions.replaceChildren();let found=0;
     groups.forEach(group=>{
@@ -1036,7 +1064,7 @@
     });
     if(!found){const empty=document.createElement('p');empty.textContent='No matching flavors';flavorOptions.appendChild(empty);}
   }
-  function updateSelected(){byId('selectedFlavors').textContent=selected.size?Array.from(selected).join(' • '):'No flavors selected';byId('flavorToggle').firstChild.textContent=selected.size?`${selected.size} flavor(s) selected `:'Select flavor(s) ';}
+  function updateSelected(){byId('selectedFlavors').textContent=selected.size?Array.from(selected).join(' • '):'No flavors selected';byId('flavorToggle').firstChild.textContent=selected.size?`${selected.size} flavor(s) selected `:'Select flavor(s) ';document.querySelectorAll('#menu .flavor-choose').forEach(btn=>{const name=btn.closest('.flavor-item')?.querySelector('span')?.textContent.trim();const active=selected.has(name);btn.setAttribute('aria-pressed',String(active));btn.textContent=active?'Selected':'Choose';});}
   byId('flavorToggle').addEventListener('click',()=>{const panel=byId('flavorPanel');panel.hidden=!panel.hidden;byId('flavorToggle').setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)byId('flavorSearch').focus();});
   byId('flavorSearch').addEventListener('input',e=>renderFlavors(e.target.value));renderFlavors();
   const error=byId('bookingError'), backdrop=byId('reviewBackdrop');let lastFocus=null;
