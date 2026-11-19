@@ -1,0 +1,7 @@
+SMOKELUXE iPhone scroll stability patch
+- Decorative videos and overlays no longer intercept touch events.
+- Removed universal smooth scroll rule.
+- Reduced mobile Safari expensive header blur and animation.
+- Scroll progress updates are throttled to animation frames.
+- Booking, WhatsApp, reviews, and image/video assets preserved.
+Test on iPhone Safari before replacing production site.
